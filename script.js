@@ -35,35 +35,37 @@ const isValidEmail = (email) => {
 };
 
 const validateInputs = () => {
-  const usernameValue = username.ariaValueMax.trim();
-  const emailValue = email.ariaValueMax.trim();
-  const passwordValue = password.ariaValueMax.trim();
-  const password2Value = password2.ariaValueMax.trim();
+  const usernameValue = username.value.trim();
+  const emailValue = email.value.trim();
+  const passwordValue = password.value.trim();
+  const password2Value = password2.value.trim();
 
-  if (username === "") {
-    setError(username, "Username is required.");
+  if (usernameValue === "") {
+    setError(username, "Username is required");
   } else {
     setSuccess(username);
   }
 
   if (emailValue === "") {
-    setError(email, "Email is required.");
+    setError(email, "Email is required");
   } else if (!isValidEmail(emailValue)) {
-    setError(email, "Provide a valid email address !");
+    setError(email, "Provide a valid email address");
   } else {
     setSuccess(email);
   }
+
   if (passwordValue === "") {
     setError(password, "Password is required");
-  } else if (password2Value.length < 8) {
-    setError(password, "Password must contain 8 or more character.");
+  } else if (passwordValue.length < 8) {
+    setError(password, "Password must be at least 8 character.");
   } else {
     setSuccess(password);
   }
+
   if (password2Value === "") {
     setError(password2, "Please confirm your password");
   } else if (password2Value !== passwordValue) {
-    setError(password2, "Passwords do not match!");
+    setError(password2, "Passwords doesn't match");
   } else {
     setSuccess(password2);
   }
