@@ -1,29 +1,70 @@
-const name = document.getElementById("name");
-const password = document.getElementById("password");
 const form = document.getElementById("form");
-const errorElement = document.getElementById("error");
+const username = document.getElementById("username");
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const password2 = document.getElementById("password2");
 
 form.addEventListener("submit", (e) => {
-  let messages = [];
+  e.preventDefault();
 
-  if (name.value === "" || name.value == null) {
-    messages.push("Name is required");
-  }
-
-  if (password.value.length <= 6) {
-    messages.push("Password must be at least 6 characters");
-  }
-
-  if (password.value.length >= 32) {
-    messages.push("Password must be at least 32 characters");
-  }
-
-  if (password.value === "password") {
-    messages.push("Password cannot be Password");
-  }
-
-  if (messages.length > 0) {
-    e.preventDefault();
-    errorElement.innerHTML = messages.join(", ");
-  }
+  validateInputs();
 });
+
+const setError = (element, message) => {
+  const inputControl = element.parentElement;
+  const errorDisplay = inputControl.querySelector(".error");
+
+  errorDisplay.innerText = message;
+  inputControl.classList.add("error");
+  inputControl.classList.remove("success");
+};
+
+const setSuccess = (element) => {
+  const inputControl = element.parentElement;
+  const errorDisplay = inputControl.querySelector(".error");
+
+  errorDisplay.innerText = "";
+  inputControl.classList.add("success");
+  inputControl.classList.remove("error");
+};
+
+const isValidEmail = (email) => {
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+};
+
+const validateInputs = () => {
+  const usernameValue = username.ariaValueMax.trim();
+  const emailValue = email.ariaValueMax.trim();
+  const passwordValue = password.ariaValueMax.trim();
+  const password2Value = password2.ariaValueMax.trim();
+
+  if (username === "") {
+    setError(username, "Username is required.");
+  } else {
+    setSuccess(username);
+  }
+
+  if (emailValue === "") {
+    setError(email, "Email is required.");
+  } else if (!isValidEmail(emailValue)) {
+    setError(email, "Provide a valid email address !");
+  } else {
+    setSuccess(email);
+  }
+  if (passwordValue === "") {
+    setError(password, "Password is required");
+  } else if (password2Value.length < 8) {
+    setError(password, "Password must contain 8 or more character.");
+  } else {
+    setSuccess(password);
+  }
+  if (password2Value === "") {
+    setError(password2, "Please confirm your password");
+  } else if (password2Value !== passwordValue) {
+    setError(password2, "Passwords do not match!");
+  } else {
+    setSuccess(password2);
+  }
+};
